@@ -1,95 +1,102 @@
 #include "monty.h"
+
 /**
- *_swap -main entry.
- *Description: Function that swaps the top 2 elements of stack
- * @top: element at the top of the stack (head)
- * @line_number: constant int value in the structure
- * Return: void
- **/
-void _swap(stack_t **top, unsigned int line_number)
-{
-	int num;
-
-	if (*top == NULL || (*top)->next == NULL)
-		swap_error(line_number);
-
-	num = (*top)->n;
-	(*top)->n = (*top)->next->n;
-	(*top)->next->n = num;
-}
-/**
- *_add -main entry.
- *Description: Function that adds the top two elements of the stack
- * @top: element at the top of the stack (head)
- * @line_number: constant int value in the structure
- * Return: void
- **/
-void _add(stack_t **top, unsigned int line_number)
-{
-	stack_t *tmp;
-
-	if (*top == NULL || (*top)->next == NULL)
-		add_error(line_number);
-
-	tmp = (*top)->next;
-	tmp->n += (*top)->n;
-	pop_stack(top, line_number);
-}
-/**
- *_sub -main entry.
- *Description:Sub the top element of stck from the 2d top elem of the stak
- * @top: element at the top of the stack (head)
- * @line_number: constant int value in the structure
- * Return: void
- **/
-void _sub(stack_t **top, unsigned int line_number)
-{
-	stack_t *tmp;
-
-	if (*top == NULL || (*top)->next == NULL)
-		sub_error(line_number);
-
-	tmp = (*top)->next;
-	tmp->n -= (*top)->n;
-	pop_stack(top, line_number);
-}
-/**
- * _div - main entry
- * Description: Divides the seccond top element of the stack by the top element
- * @top: element at the top of the stack (head)
- * @line_number: constant int value in the structure
- * Return: void
+ * _queue - sets the format of the data to a queue (FIFO)
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-
-void _div(stack_t **top, unsigned int line_number)
+void _queue(stack_t **doubly, unsigned int cline)
 {
-	stack_t *tmp;
+	(void)doubly;
+	(void)cline;
 
-	if (*top == NULL || (*top)->next == NULL)
-		div_error(line_number);
-
-	if ((*top)->n == 0)
-		div_error2(line_number);
-
-	tmp = (*top)->next;
-	tmp->n = (tmp->n) / (*top)->n;
-	pop_stack(top, line_number);
+	vglo.lifo = 0;
 }
+
 /**
- * _mul - main entry
- * Description: multiply the seccond top element of stack and the top element
- * @top: element at the top of the stack (head)
- * @line_number: constant int value in the structure
- * Return: void
+ * _stack - sets the format fo the data to a stack (LIFO)
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
  */
-void _mul(stack_t **top, unsigned int line_number)
+void _stack(stack_t **doubly, unsigned int cline)
 {
-	stack_t *tmp;
+	(void)doubly;
+	(void)cline;
 
-	if (*top == NULL || (*top)->next == NULL)
-		mul_error(line_number);
+	vglo.lifo = 1;
+}
 
-	tmp = (*top)->next;
-	tmp->n *= (*top)->n;
-	pop_stack(top, line_number);
+/**
+ * _add - adds the top two elements of the stack
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
+ */
+void _add(stack_t **doubly, unsigned int cline)
+{
+	int m = 0;
+	stack_t *aux = NULL;
+
+	aux = *doubly;
+
+	for (; aux != NULL; aux = aux->next, m++)
+		;
+
+	if (m < 2)
+	{
+		dprintf(2, "L%u: can't add, stack too short\n", cline);
+		free_vglo();
+		exit(EXIT_FAILURE);
+	}
+
+	aux = (*doubly)->next;
+	aux->n += (*doubly)->n;
+	_pop(doubly, cline);
+}
+
+/**
+ * _nop - doesn't do anythinhg
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
+ */
+void _nop(stack_t **doubly, unsigned int cline)
+{
+	(void)doubly;
+	(void)cline;
+}
+
+/**
+ * _sub - subtracts the top element to the second top element of the stack
+ *
+ * @doubly: head of the linked list
+ * @cline: line number;
+ * Return: no return
+ */
+void _sub(stack_t **doubly, unsigned int cline)
+{
+	int m = 0;
+	stack_t *aux = NULL;
+
+	aux = *doubly;
+
+	for (; aux != NULL; aux = aux->next, m++)
+		;
+
+	if (m < 2)
+	{
+		dprintf(2, "L%u: can't sub, stack too short\n", cline);
+		free_vglo();
+		exit(EXIT_FAILURE);
+	}
+
+	aux = (*doubly)->next;
+	aux->n -= (*doubly)->n;
+	_pop(doubly, cline);
 }
