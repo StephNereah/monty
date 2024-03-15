@@ -8,5 +8,7 @@ monty.h - contains all the structure and prototype
 
 main.c - main function for monty interpreter
 
+NB:NOT TOO PERFECT BUT IT SHALL BE PERFECTED 
+
 AUTHORS:
 **StephNereah**
